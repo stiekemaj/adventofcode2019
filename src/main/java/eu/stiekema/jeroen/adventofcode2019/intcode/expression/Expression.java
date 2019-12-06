@@ -1,4 +1,6 @@
-package eu.stiekema.jeroen.adventofcode2019.day2;
+package eu.stiekema.jeroen.adventofcode2019.intcode.expression;
+
+import eu.stiekema.jeroen.adventofcode2019.intcode.Context;
 
 public interface Expression {
     int interpret(Context context);

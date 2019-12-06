@@ -1,4 +1,4 @@
-package eu.stiekema.jeroen.adventofcode2019.day2;
+package eu.stiekema.jeroen.adventofcode2019.intcode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +13,11 @@ public class Memory {
         this.addresses.addAll(addresses);
     }
 
-    int next() {
+    public int next() {
         return addresses.get(pointer++);
     }
 
-    void write(int index, int value) {
+    public void write(int index, int value) {
         addresses.remove(index);
         addresses.add(index, value);
     }
@@ -26,7 +26,7 @@ public class Memory {
         return pointer;
     }
 
-    int get(int index) {
+    public int get(int index) {
         return addresses.get(index);
     }
 

@@ -7,6 +7,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        long time = System.currentTimeMillis();
         InputStream inputStream = eu.stiekema.jeroen.adventofcode2019.day1.Main.class.getClassLoader().getResourceAsStream("day5.txt");
         List<String> items = InputStreamUtil.readLines(inputStream);
 
@@ -31,6 +32,9 @@ public class Main {
         System.out.println("Answer part 1: " + calculateNumberOfDirectAndIndirectOrbits(spaceObjects));
 
         System.out.println("Answer part 2: " + calculateMinimalOrbitalTransfers(spaceObjects.get("YOU"), spaceObjects.get("SAN")));
+
+        System.out.println("total time: " + (System.currentTimeMillis() - time));
+
     }
 
     private static int calculateMinimalOrbitalTransfers(SpaceObject you, SpaceObject san) {
