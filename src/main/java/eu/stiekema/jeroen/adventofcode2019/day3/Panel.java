@@ -13,19 +13,13 @@ class Panel {
         this.wire2 = wire2;
     }
 
-    Coordinate getClosestIntersection() {
+    int getClosestIntersectionDistance(ClosestDistanceCalculatorStrategy strategy) throws NoIntersectionFoundException {
         Set<Coordinate> intersections = getIntersections();
-        Coordinate referenceCoordinate = new Coordinate(0, 0);
-        Coordinate closestIntersection = null;
-
-        for (Coordinate intersection : intersections) {
-            if (closestIntersection == null
-                    || intersection.distanceTo(referenceCoordinate) < closestIntersection.distanceTo(referenceCoordinate)) {
-                closestIntersection = intersection;
-            }
+        if (intersections.isEmpty()) {
+            throw new NoIntersectionFoundException();
         }
 
-        return closestIntersection;
+        return strategy.getClosestDistance(intersections, wire1, wire2);
     }
 
     private Set<Coordinate> getIntersections() {

@@ -18,11 +18,12 @@ public class Main {
         List<Line> firstWire = wireFactory.createWire(firstWireString);
         List<Line> secondWire = wireFactory.createWire(secondWireString);
         Panel panel = new Panel(firstWire, secondWire);
-        Coordinate closestIntersection = panel.getClosestIntersection();
-        if (closestIntersection == null) {
+
+        try {
+            System.out.println("Answer part 1: " + panel.getClosestIntersectionDistance(new ClosestManhattanDistanceCalculatorStrategy()));
+            System.out.println("Answer part 2: " + panel.getClosestIntersectionDistance(new SmallestWireDistanceCalculatorStrategy()));
+        } catch (NoIntersectionFoundException e) {
             System.out.println("No intersection found");
-        } else {
-            System.out.println(closestIntersection.distanceTo(new Coordinate(0, 0)));
         }
     }
 }
