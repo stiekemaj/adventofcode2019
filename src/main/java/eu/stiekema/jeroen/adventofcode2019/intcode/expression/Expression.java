@@ -1,12 +1,26 @@
 package eu.stiekema.jeroen.adventofcode2019.intcode.expression;
 
 import eu.stiekema.jeroen.adventofcode2019.intcode.Context;
+import eu.stiekema.jeroen.adventofcode2019.intcode.DiagnosticFailureException;
 
 public interface Expression {
     int interpret(Context context);
 
-    static Expression number(int number) {
+    static Expression onValidDiagnoseCode(Expression expression) {
+        return context -> {
+            if (context.getOutput() != 0) {
+                throw new DiagnosticFailureException();
+            }
+            return expression.interpret(context);
+        };
+    }
+
+    static Expression value(int number) {
         return context -> number;
+    }
+
+    static Expression valueByReference(int reference) {
+        return context -> context.getMemory().get(reference);
     }
 
     static Expression plus(Expression left, Expression right) {
@@ -17,20 +31,12 @@ public interface Expression {
         return context -> left.interpret(context) * right.interpret(context);
     }
 
-    static Expression reference(Expression expression) {
-        return context -> context.getMemory().get(expression.interpret(context));
-    }
-
     static Expression write(Expression expression, int address) {
         return context -> {
             int value = expression.interpret(context);
             context.getMemory().write(address, value);
             return value;
         };
-    }
-
-    static Expression read(int address) {
-        return context -> context.getMemory().get(address);
     }
 
     static Expression output(Expression expression) {

@@ -19,13 +19,9 @@ public class IntcodeComputer {
         Context context = new Context(memory, input);
 
         while (!context.isTerminate()) {
-            if (context.getOutput() != 0) {
-                throw new DiagnosticFailureException();
-            }
-            String opCodeString = Integer.toString(memory.next());
-            OpCode opCode = OpCode.findByCode(opCodeString);
-            opCode.getIntcodeExpressionFactory()
-                    .createExpression(opCodeString, context)
+            OpCodeInstruction opCodeInstruction = OpCodeInstruction.ofCode(memory.next());
+            opCodeInstruction.getOpCode().getIntcodeExpressionFactory()
+                    .createExpression(opCodeInstruction, context)
                     .interpret(context);
         }
         return context;

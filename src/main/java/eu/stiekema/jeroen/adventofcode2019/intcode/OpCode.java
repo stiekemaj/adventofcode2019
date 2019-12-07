@@ -3,10 +3,10 @@ package eu.stiekema.jeroen.adventofcode2019.intcode;
 import eu.stiekema.jeroen.adventofcode2019.intcode.expression.*;
 
 enum OpCode {
-    ADD("1", new AddExpressionFactory()),
-    MULTIPLY("2", new MultiplyExpressionFactory()),
-    INPUT("3", new InputExpressionFactory()),
-    OUTPUT("4", new OutputExpressionFactory()),
+    ADD("01", new AddExpressionFactory()),
+    MULTIPLY("02", new MultiplyExpressionFactory()),
+    INPUT("03", new InputExpressionFactory()),
+    OUTPUT("04", new OutputExpressionFactory()),
     TERMINATED("99", new TerminatedExpressionFactory());
 
     private String code;

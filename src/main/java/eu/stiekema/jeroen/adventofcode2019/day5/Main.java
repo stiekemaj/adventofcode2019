@@ -15,7 +15,8 @@ public class Main {
 
         IntcodeComputer intcodeComputer = new IntcodeComputer();
 
-        intcodeComputer.interpretAndReturnDiagnosticCode(codes, AIRCONDITIONER_UNIT_ID);
+        int diagnosticCode = intcodeComputer.interpretAndReturnDiagnosticCode(codes, AIRCONDITIONER_UNIT_ID);
+        System.out.println("Solution day 5 part 1: " + diagnosticCode);
 
     }
 }
