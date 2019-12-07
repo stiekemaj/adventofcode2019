@@ -47,6 +47,27 @@ public interface Expression {
         };
     }
 
+    static Expression ifNonZeroThenElse(Expression conditionExpression, Expression resultExpression, Expression elseExpression) {
+        return context -> {
+            if (conditionExpression.interpret(context) != 0) {
+                return resultExpression.interpret(context);
+            } else {
+                return elseExpression.interpret(context);
+            }
+        };
+    }
+
+    static Expression setPointer(Expression expression) {
+        return context -> {
+            context.getMemory().setPointer(expression.interpret(context));
+            return 0;
+        };
+    }
+
+    static Expression noOp() {
+        return context -> 0;
+    }
+
     static Expression terminate() {
         return context -> {
             context.setTerminate(true);

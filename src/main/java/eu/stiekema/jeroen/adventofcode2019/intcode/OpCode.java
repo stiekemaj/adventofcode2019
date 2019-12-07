@@ -7,6 +7,10 @@ enum OpCode {
     MULTIPLY("02", new MultiplyExpressionFactory()),
     INPUT("03", new InputExpressionFactory()),
     OUTPUT("04", new OutputExpressionFactory()),
+    JUMP_IF_TRUE("05", new JumpIfTrueExpressionFactory()),
+    JUMP_IF_FALSE("06", new JumpIfFalseExpressionFactory()),
+    LESS_THAN("07", new LessThanExpressionFactory()),
+    EQUALS("08", new EqualsExpressionFactory()),
     TERMINATED("99", new TerminatedExpressionFactory());
 
     private String code;

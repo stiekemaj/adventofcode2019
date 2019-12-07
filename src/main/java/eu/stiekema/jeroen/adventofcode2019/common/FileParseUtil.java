@@ -5,7 +5,6 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class FileParseUtil {
     public static List<String> readLines(InputStream input) {
@@ -25,11 +24,7 @@ public class FileParseUtil {
         InputStream inputStream = FileParseUtil.class.getClassLoader().getResourceAsStream(file);
         StringWriter writer = new StringWriter();
         IOUtils.copy(inputStream, writer, "UTF-8");
-        StringTokenizer st = new StringTokenizer(writer.toString(), ",");
-        List<Integer> codes = new ArrayList<>();
-        while (st.hasMoreTokens()) {
-            codes.add(Integer.valueOf(st.nextToken()));
-        }
-        return codes;
+        String str = writer.toString();
+        return StringParseUtil.getCodes(str);
     }
 }

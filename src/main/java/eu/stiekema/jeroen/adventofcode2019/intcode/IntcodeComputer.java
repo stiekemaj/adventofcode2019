@@ -1,5 +1,8 @@
 package eu.stiekema.jeroen.adventofcode2019.intcode;
 
+import eu.stiekema.jeroen.adventofcode2019.intcode.expression.Expression;
+import eu.stiekema.jeroen.adventofcode2019.intcode.expression.IntcodeExpressionFactory;
+
 import java.util.List;
 
 public class IntcodeComputer {
@@ -20,9 +23,9 @@ public class IntcodeComputer {
 
         while (!context.isTerminate()) {
             OpCodeInstruction opCodeInstruction = OpCodeInstruction.ofCode(memory.next());
-            opCodeInstruction.getOpCode().getIntcodeExpressionFactory()
-                    .createExpression(opCodeInstruction, context)
-                    .interpret(context);
+            IntcodeExpressionFactory factory = opCodeInstruction.getOpCode().getIntcodeExpressionFactory();
+            Expression expression = factory.createExpression(opCodeInstruction, context);
+            expression.interpret(context);
         }
         return context;
     }

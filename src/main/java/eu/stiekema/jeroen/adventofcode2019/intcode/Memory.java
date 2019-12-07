@@ -34,4 +34,8 @@ public class Memory {
     public String toString() {
         return addresses.toString();
     }
+
+    public void setPointer(int pointer) {
+        this.pointer = pointer;
+    }
 }
