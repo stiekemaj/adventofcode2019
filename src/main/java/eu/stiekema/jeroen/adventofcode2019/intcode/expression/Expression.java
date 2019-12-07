@@ -29,6 +29,18 @@ public interface Expression {
         };
     }
 
+    static Expression read(int address) {
+        return context -> context.getMemory().get(address);
+    }
+
+    static Expression output(Expression expression) {
+        return context -> {
+            int value = expression.interpret(context);
+            context.setOutput(value);
+            return value;
+        };
+    }
+
     static Expression terminate() {
         return context -> {
             context.setTerminate(true);
