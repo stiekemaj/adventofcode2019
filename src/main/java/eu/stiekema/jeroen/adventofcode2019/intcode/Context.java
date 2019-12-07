@@ -1,12 +1,14 @@
 package eu.stiekema.jeroen.adventofcode2019.intcode;
 
+import java.util.Queue;
+
 public class Context {
     private final Memory memory;
     private boolean terminate;
-    private final int input;
+    private final Queue<Integer> input;
     private int output = 0;
 
-    public Context(Memory memory, int input) {
+    public Context(Memory memory, Queue<Integer> input) {
         this.memory = memory;
         this.input = input;
     }
@@ -20,7 +22,10 @@ public class Context {
     }
 
     public int getInput() {
-        return input;
+        if (input.size() == 0) {
+            throw new IllegalStateException("No more input values available");
+        }
+        return input.remove();
     }
 
     public int getOutput() {

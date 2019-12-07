@@ -1,6 +1,7 @@
 package eu.stiekema.jeroen.adventofcode2019.common;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -11,6 +12,6 @@ public class StringParseUtil {
         while (st.hasMoreTokens()) {
             codes.add(Integer.valueOf(st.nextToken()));
         }
-        return codes;
+        return Collections.unmodifiableList(codes);
     }
 }
