@@ -1,6 +1,6 @@
 package eu.stiekema.jeroen.adventofcode2019.day6;
 
-import eu.stiekema.jeroen.adventofcode2019.common.InputStreamUtil;
+import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
 
 import java.io.InputStream;
 import java.util.*;
@@ -8,8 +8,8 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         long time = System.currentTimeMillis();
-        InputStream inputStream = eu.stiekema.jeroen.adventofcode2019.day1.Main.class.getClassLoader().getResourceAsStream("day5.txt");
-        List<String> items = InputStreamUtil.readLines(inputStream);
+        InputStream inputStream = eu.stiekema.jeroen.adventofcode2019.day1.Main.class.getClassLoader().getResourceAsStream("day6.txt");
+        List<String> items = FileParseUtil.readLines(inputStream);
 
         Map<String, SpaceObject> spaceObjects = new HashMap<>();
 

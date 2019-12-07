@@ -31,7 +31,7 @@ public interface Expression {
 
     static Expression terminate() {
         return context -> {
-            context.setTerminated(true);
+            context.setTerminate(true);
             return 0;
         };
     }

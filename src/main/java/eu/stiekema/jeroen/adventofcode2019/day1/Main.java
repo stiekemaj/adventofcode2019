@@ -1,6 +1,6 @@
 package eu.stiekema.jeroen.adventofcode2019.day1;
 
-import eu.stiekema.jeroen.adventofcode2019.common.InputStreamUtil;
+import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
 
 import java.io.InputStream;
 import java.util.List;
@@ -11,7 +11,7 @@ public class Main {
         ModuleFuelCalculator moduleFuelCalculator = new ModuleFuelCalculator();
 
         InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("day1.txt");
-        List<String> modules = InputStreamUtil.readLines(inputStream);
+        List<String> modules = FileParseUtil.readLines(inputStream);
 
         System.out.println("Total amount of fuel (simple calculation): " +
                 calculateTotalAmountOfFuel(modules, moduleFuelCalculator::simpleCalculate));

@@ -36,18 +36,27 @@ public class IntcodeComputer {
         }
     }
 
-    public int interpretAndReturnIndex0(List<Integer> codes) {
-        Memory memory = new Memory(codes);
-        Context context = new Context(memory);
+    public int interpretAndReturnIndex0(List<Integer> codes, int input) {
+        Context context = interpret(codes, input);
+        return context.getMemory().get(0);
+    }
 
-        while (!context.isTerminated()) {
+    public int interpretAndReturnDiagnosticCode(List<Integer> codes, int input) {
+        Context context = interpret(codes, input);
+        return context.getOutput();
+    }
+
+    private Context interpret(List<Integer> codes, int input) {
+        Memory memory = new Memory(codes);
+        Context context = new Context(memory, input);
+
+        while (!context.isTerminate()) {
             String opCodeString = Integer.toString(memory.next());
             OpCode opCode = OpCode.findByCode(opCodeString);
             opCode.getIntcodeExpressionFactory()
                     .createExpression(opCodeString, context)
                     .interpret(context);
         }
-
-        return context.getMemory().get(0);
+        return context;
     }
 }

@@ -1,6 +1,6 @@
 package eu.stiekema.jeroen.adventofcode2019.day3;
 
-import eu.stiekema.jeroen.adventofcode2019.common.InputStreamUtil;
+import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
 
 import java.io.InputStream;
 import java.util.List;
@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
 
         InputStream inputStream = eu.stiekema.jeroen.adventofcode2019.day1.Main.class.getClassLoader().getResourceAsStream("day3.txt");
-        List<String> lines = InputStreamUtil.readLines(inputStream);
+        List<String> lines = FileParseUtil.readLines(inputStream);
 
         String firstWireString = lines.get(0);
         String secondWireString = lines.get(1);
