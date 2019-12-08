@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        List<Integer> codes = FileParseUtil.getCodes("day2.txt");
+        List<Integer> codes = FileParseUtil.getCodes("day2.txt", ",");
 
         writeNoun(codes, 12);
         writeVerb(codes, 2);

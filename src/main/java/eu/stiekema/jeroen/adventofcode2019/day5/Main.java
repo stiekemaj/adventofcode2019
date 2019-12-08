@@ -12,7 +12,7 @@ public class Main {
     public static final int THERMAL_RADIATOR_ID = 5;
 
     public static void main(String[] args) throws IOException {
-        List<Integer> codes = FileParseUtil.getCodes("day5.txt");
+        List<Integer> codes = FileParseUtil.getCodes("day5.txt", ",");
 
         IntcodeComputer intcodeComputer = new IntcodeComputer();
 

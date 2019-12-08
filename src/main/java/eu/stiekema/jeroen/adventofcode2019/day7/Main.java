@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        List<Integer> codes = FileParseUtil.getCodes("day7.txt");
+        List<Integer> codes = FileParseUtil.getCodes("day7.txt", ",");
         Collection<List<Integer>> phaseSettingsCombinations = Collections2.permutations(List.of(0, 1, 2, 3, 4));
         IntcodeComputer intcodeComputer = new IntcodeComputer();
 

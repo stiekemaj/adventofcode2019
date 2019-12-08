@@ -7,6 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileParseUtil {
+
+    public static String readFileAsString(String file) throws IOException {
+        InputStream inputStream = FileParseUtil.class.getClassLoader().getResourceAsStream(file);
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(inputStream, writer, "UTF-8");
+        return writer.toString();
+    }
+
     public static List<String> readLines(InputStream input) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         List<String> result = new ArrayList<>();
@@ -20,11 +28,11 @@ public class FileParseUtil {
         return result;
     }
 
-    public static List<Integer> getCodes(String file) throws IOException {
+    public static List<Integer> getCodes(String file, String delimiter) throws IOException {
         InputStream inputStream = FileParseUtil.class.getClassLoader().getResourceAsStream(file);
         StringWriter writer = new StringWriter();
         IOUtils.copy(inputStream, writer, "UTF-8");
         String str = writer.toString();
-        return StringParseUtil.getCodes(str);
+        return StringParseUtil.getCodes(str, delimiter);
     }
 }
