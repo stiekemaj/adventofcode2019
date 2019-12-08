@@ -14,11 +14,13 @@ public class Main {
     public static void main(String[] args) throws IOException {
         List<Integer> codes = FileParseUtil.getCodes("day5.txt", ",");
 
-        IntcodeComputer intcodeComputer = new IntcodeComputer();
+        IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+        intcodeComputer.addInput(AIRCONDITIONER_UNIT_ID);
+        System.out.println("Solution day 5 part 1: " + intcodeComputer.executeDiagnostic());
 
-        System.out.println("Solution day 5 part 1: " + intcodeComputer.interpretAndReturnDiagnosticCode(codes, AIRCONDITIONER_UNIT_ID));
 
-        System.out.println("Solution day 5 part 2: " + intcodeComputer.interpretAndReturnDiagnosticCode(codes, THERMAL_RADIATOR_ID));
-
+        intcodeComputer = IntcodeComputer.newInstance(codes);
+        intcodeComputer.addInput(THERMAL_RADIATOR_ID);
+        System.out.println("Solution day 5 part 2: " + intcodeComputer.executeDiagnostic());
     }
 }

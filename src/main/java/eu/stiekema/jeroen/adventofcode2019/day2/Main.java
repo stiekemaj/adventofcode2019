@@ -12,8 +12,10 @@ public class Main {
 
         writeNoun(codes, 12);
         writeVerb(codes, 2);
-        IntcodeComputer intcodeComputer = new IntcodeComputer();
-        System.out.println("Result of first question: " + intcodeComputer.interpretAndReturnIndex0(codes, 0));
+        IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+        intcodeComputer.addInput(0);
+        intcodeComputer.executeDiagnostic();
+        System.out.println("Result of first question: " + intcodeComputer.getIndex0Value());
         System.out.println("Result of second question: " + findProductOfNounAndVerbForResult(codes, 19690720));
     }
 
@@ -22,8 +24,10 @@ public class Main {
             for (int verb = 0; verb < 100; verb++) {
                 writeNoun(codes, noun);
                 writeVerb(codes, verb);
-                IntcodeComputer intcodeComputer = new IntcodeComputer();
-                if (intcodeComputer.interpretAndReturnIndex0(codes, 0) == result) {
+                IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+                intcodeComputer.addInput(0);
+                intcodeComputer.executeDiagnostic();
+                if (intcodeComputer.getIndex0Value() == result) {
                     return 100 * noun + verb;
                 }
             }

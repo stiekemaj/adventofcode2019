@@ -7,34 +7,59 @@ import java.util.*;
 
 public class IntcodeComputer {
 
-    public int interpretAndReturnIndex0(List<Integer> codes, int input) {
-        return this.interpretAndReturnIndex0(codes, new LinkedList<>(Arrays.asList(input)));
+    private Context context;
+
+    private IntcodeComputer(List<Integer> codes, Queue<Integer> input) {
+        this.context = new Context(new Memory(codes), input);
     }
 
-    public int interpretAndReturnIndex0(List<Integer> codes, Queue<Integer> input) {
-        Context context = interpret(codes, input);
-        return context.getMemory().get(0);
+    public static IntcodeComputer newInstance(List<Integer> codes) {
+        return new IntcodeComputer(codes, new LinkedList<>());
     }
 
-    public int interpretAndReturnDiagnosticCode(List<Integer> codes, int input) {
-        return this.interpretAndReturnDiagnosticCode(codes, new LinkedList<>(Arrays.asList(input)));
+    public void addInput(int input) {
+        this.context.addInput(input);
     }
 
-    public int interpretAndReturnDiagnosticCode(List<Integer> codes, Queue<Integer> input) {
-        Context context = interpret(codes, input);
+    /**
+     * Execute code until output and terminate opcode has been processed subsequently. The output will be returned.
+     * If an output opcode will be followed by any opcode other than terminate, a DiagnosticFailureException will
+     * be thrown if the output is other than 0.
+     * @return
+     */
+    public int executeDiagnostic() {
+        while (!context.isTerminated()) {
+            OpCodeInstruction opCodeInstruction = OpCodeInstruction.ofCode(this.context.getMemory().next());
+            IntcodeExpressionFactory factory = opCodeInstruction.getOpCode().getIntcodeExpressionFactory();
+            Expression expression = factory.createExpressionForDiagnoseMode(opCodeInstruction, context);
+            expression.interpret(context);
+        }
         return context.getOutput();
     }
+    
+    public int getIndex0Value() {
+        return context.getMemory().get(0);
+    }
+    
+    public boolean isTerminated() {
+        return this.context.isTerminated();
+    }
 
-    private Context interpret(List<Integer> codes, Queue<Integer> input) {
-        Memory memory = new Memory(codes);
-        Context context = new Context(memory, input);
-
-        while (!context.isTerminate()) {
-            OpCodeInstruction opCodeInstruction = OpCodeInstruction.ofCode(memory.next());
+    public int execute() throws IntCodeComputerTerminatedException {
+        while (!context.isTerminated()) {
+            OpCodeInstruction opCodeInstruction = OpCodeInstruction.ofCode(this.context.getMemory().next());
             IntcodeExpressionFactory factory = opCodeInstruction.getOpCode().getIntcodeExpressionFactory();
             Expression expression = factory.createExpression(opCodeInstruction, context);
             expression.interpret(context);
+            if (opCodeInstruction.getOpCode() == OpCode.OUTPUT) {
+                // check if next code is exit code
+                if (OpCodeInstruction.ofCode(this.context.getMemory().peek()).getOpCode() == OpCode.TERMINATED) {
+                    context.setTerminate(true);
+                }
+                return context.getOutput();
+            }
         }
-        return context;
+        throw new IntCodeComputerTerminatedException();
     }
+
 }

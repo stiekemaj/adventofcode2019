@@ -17,6 +17,10 @@ public class Memory {
         return addresses.get(pointer++);
     }
 
+    public int peek() {
+        return addresses.get(pointer);
+    }
+
     public void write(int index, int value) {
         addresses.remove(index);
         addresses.add(index, value);

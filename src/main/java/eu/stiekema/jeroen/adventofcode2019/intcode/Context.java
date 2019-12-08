@@ -17,8 +17,12 @@ public class Context {
         return memory;
     }
 
-    public boolean isTerminate() {
+    public boolean isTerminated() {
         return terminate;
+    }
+
+    public void addInput(int input) {
+        this.input.add(input);
     }
 
     public int getInput() {
