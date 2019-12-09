@@ -14,7 +14,7 @@ public class OpCodeInstruction {
         this.parameterModes = parameterModes;
     }
 
-    static OpCodeInstruction ofCode(int code) {
+    static OpCodeInstruction ofCode(long code) {
         String fullCodeString = String.format("%05d", code);
         OpCode opCode = OpCode.findByCode(fullCodeString.substring(fullCodeString.length() - 2));
 
@@ -31,12 +31,27 @@ public class OpCodeInstruction {
         return this.opCode;
     }
 
-    public Expression getParameterExpression(int paramIndex, int parameterValue) {
+    public Expression getParameterExpression(int paramIndex, long parameterValue) {
         ParameterMode parameterMode = parameterModes.get(paramIndex);
         if (parameterMode == ParameterMode.IMMEDIATE) {
             return Expression.value(parameterValue);
         } else if (parameterMode == ParameterMode.POSITION) {
             return Expression.valueByReference(parameterValue);
+        } else if (parameterMode == ParameterMode.RELATIVE) {
+            return Expression.valueByRelative(parameterValue);
+        } else {
+            throw new IllegalArgumentException("unknown parameter mode: " + parameterMode);
+        }
+    }
+
+    public Expression getWriteParameterExpression(int paramIndex, long parameterValue) {
+        ParameterMode parameterMode = parameterModes.get(paramIndex);
+        if (parameterMode == ParameterMode.IMMEDIATE) {
+            throw new IllegalArgumentException("Mode of write parameter can't be IMMEDIATE");
+        } else if (parameterMode == ParameterMode.POSITION) {
+            return Expression.value(parameterValue);
+        } else if (parameterMode == ParameterMode.RELATIVE) {
+            return context -> parameterValue + context.getRelativeBase();
         } else {
             throw new IllegalArgumentException("unknown parameter mode: " + parameterMode);
         }

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        List<Integer> codes = FileParseUtil.getCodes("day7.txt", ",");
+        List<Long> codes = FileParseUtil.getCodes("day7.txt", ",");
         Collection<List<Integer>> phaseSettingsCombinations = Collections2.permutations(List.of(0, 1, 2, 3, 4));
         System.out.println("Answer part 1: " + getHighestOutput(codes, phaseSettingsCombinations, false));
 
@@ -22,8 +22,8 @@ public class Main {
 
     }
 
-    private static int getHighestOutput(List<Integer> codes, Collection<List<Integer>> phaseSettingsCombinations, boolean feedbackMode) {
-        int highestOutput = 0;
+    private static long getHighestOutput(List<Long> codes, Collection<List<Integer>> phaseSettingsCombinations, boolean feedbackMode) {
+        long highestOutput = 0;
         for (List<Integer> phaseSettingCombination : phaseSettingsCombinations) {
             List<IntcodeComputer> intcodeComputers = phaseSettingCombination.stream()
                     .map(phase -> {
@@ -34,7 +34,7 @@ public class Main {
                     .collect(Collectors.toList());
 
             try {
-                int previousOutput = 0;
+                long previousOutput = 0;
                 do {
                     for (IntcodeComputer intcodeComputer : intcodeComputers) {
                         intcodeComputer.addInput(previousOutput);

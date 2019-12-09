@@ -5,33 +5,51 @@ import java.util.List;
 
 public class Memory {
 
-    private final List<Integer> addresses = new ArrayList<>();
+    private final List<Long> addresses = new ArrayList<>();
 
     private int pointer = 0;
 
-    Memory(List<Integer> addresses) {
+    Memory(List<Long> addresses) {
         this.addresses.addAll(addresses);
     }
 
-    public int next() {
+    public long next() {
         return addresses.get(pointer++);
     }
 
-    public int peek() {
+    public long peek() {
         return addresses.get(pointer);
     }
 
-    public void write(int index, int value) {
-        addresses.remove(index);
-        addresses.add(index, value);
+    public void write(long index, long value) {
+        if (index > Integer.MAX_VALUE) {
+            throw new RuntimeException("does not support arrays bigger than " + Integer.MAX_VALUE + ", but was " + index);
+        }
+
+        if (index >= addresses.size()) {
+            for (int i = addresses.size(); i <= index; i++) {
+                addresses.add(i, 0L);
+            }
+        }
+
+        addresses.remove((int) index);
+        addresses.add((int) index, value);
     }
 
     int getPointer() {
         return pointer;
     }
 
-    public int get(int index) {
-        return addresses.get(index);
+    public long get(long index) {
+        if (index > Integer.MAX_VALUE) {
+            throw new RuntimeException("does not support arrays bigger than " + index);
+        }
+
+        if (index >= addresses.size()) {
+            return 0;
+        }
+
+        return addresses.get((int) index);
     }
 
     @Override
@@ -39,7 +57,10 @@ public class Memory {
         return addresses.toString();
     }
 
-    public void setPointer(int pointer) {
-        this.pointer = pointer;
+    public void setPointer(long pointer) {
+        if (pointer > Integer.MAX_VALUE) {
+            throw new RuntimeException("does not support arrays bigger than " + pointer);
+        }
+        this.pointer = (int) pointer;
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        List<Integer> codes = FileParseUtil.getCodes("day2.txt", ",");
+        List<Long> codes = FileParseUtil.getCodes("day2.txt", ",");
 
         writeNoun(codes, 12);
         writeVerb(codes, 2);
@@ -19,7 +19,7 @@ public class Main {
         System.out.println("Result of second question: " + findProductOfNounAndVerbForResult(codes, 19690720));
     }
 
-    private static int findProductOfNounAndVerbForResult(List<Integer> codes, int result) {
+    private static int findProductOfNounAndVerbForResult(List<Long> codes, long result) {
         for (int noun = 0; noun < 100; noun++) {
             for (int verb = 0; verb < 100; verb++) {
                 writeNoun(codes, noun);
@@ -36,12 +36,12 @@ public class Main {
         throw new RuntimeException("no noun and verb found for result");
     }
 
-    private static void writeNoun(List<Integer> codes, int value) {
+    private static void writeNoun(List<Long> codes, long value) {
         codes.remove(1);
         codes.add(1, value);
     }
 
-    private static void writeVerb(List<Integer> codes, int value) {
+    private static void writeVerb(List<Long> codes, long value) {
         codes.remove(2);
         codes.add(2, value);
     }

@@ -2,7 +2,8 @@ package eu.stiekema.jeroen.adventofcode2019.intcode;
 
 public enum ParameterMode {
     POSITION("0"),
-    IMMEDIATE("1");
+    IMMEDIATE("1"),
+    RELATIVE("2");
 
     private String code;
 

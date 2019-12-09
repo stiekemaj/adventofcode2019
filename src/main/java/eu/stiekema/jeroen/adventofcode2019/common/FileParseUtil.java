@@ -28,7 +28,7 @@ public class FileParseUtil {
         return result;
     }
 
-    public static List<Integer> getCodes(String file, String delimiter) throws IOException {
+    public static List<Long> getCodes(String file, String delimiter) throws IOException {
         InputStream inputStream = FileParseUtil.class.getClassLoader().getResourceAsStream(file);
         StringWriter writer = new StringWriter();
         IOUtils.copy(inputStream, writer, "UTF-8");

@@ -4,7 +4,7 @@ import eu.stiekema.jeroen.adventofcode2019.intcode.Context;
 import eu.stiekema.jeroen.adventofcode2019.intcode.DiagnosticFailureException;
 
 public interface Expression {
-    int interpret(Context context);
+    long interpret(Context context);
 
     static Expression onValidDiagnoseCode(Expression expression) {
         return context -> {
@@ -15,12 +15,16 @@ public interface Expression {
         };
     }
 
-    static Expression value(int number) {
+    static Expression value(long number) {
         return context -> number;
     }
 
-    static Expression valueByReference(int reference) {
+    static Expression valueByReference(long reference) {
         return context -> context.getMemory().get(reference);
+    }
+
+    static Expression valueByRelative(long relative) {
+        return context -> context.getMemory().get(relative + context.getRelativeBase());
     }
 
     static Expression plus(Expression left, Expression right) {
@@ -31,17 +35,24 @@ public interface Expression {
         return context -> left.interpret(context) * right.interpret(context);
     }
 
-    static Expression write(Expression expression, int address) {
+    static Expression write(Expression expression, Expression address) {
         return context -> {
-            int value = expression.interpret(context);
-            context.getMemory().write(address, value);
+            long value = expression.interpret(context);
+            context.getMemory().write(address.interpret(context), value);
             return value;
+        };
+    }
+
+    static Expression increaseRelativeBase(Expression expression) {
+        return context -> {
+            context.setRelativeBase(context.getRelativeBase() + expression.interpret(context));
+            return 0;
         };
     }
 
     static Expression output(Expression expression) {
         return context -> {
-            int value = expression.interpret(context);
+            long value = expression.interpret(context);
             context.setOutput(value);
             return value;
         };

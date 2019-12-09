@@ -9,15 +9,15 @@ public class IntcodeComputer {
 
     private Context context;
 
-    private IntcodeComputer(List<Integer> codes, Queue<Integer> input) {
+    private IntcodeComputer(List<Long> codes, Queue<Long> input) {
         this.context = new Context(new Memory(codes), input);
     }
 
-    public static IntcodeComputer newInstance(List<Integer> codes) {
+    public static IntcodeComputer newInstance(List<Long> codes) {
         return new IntcodeComputer(codes, new LinkedList<>());
     }
 
-    public void addInput(int input) {
+    public void addInput(long input) {
         this.context.addInput(input);
     }
 
@@ -27,7 +27,7 @@ public class IntcodeComputer {
      * be thrown if the output is other than 0.
      * @return
      */
-    public int executeDiagnostic() {
+    public long executeDiagnostic() {
         while (!context.isTerminated()) {
             OpCodeInstruction opCodeInstruction = OpCodeInstruction.ofCode(this.context.getMemory().next());
             IntcodeExpressionFactory factory = opCodeInstruction.getOpCode().getIntcodeExpressionFactory();
@@ -37,7 +37,7 @@ public class IntcodeComputer {
         return context.getOutput();
     }
     
-    public int getIndex0Value() {
+    public long getIndex0Value() {
         return context.getMemory().get(0);
     }
     
@@ -45,7 +45,7 @@ public class IntcodeComputer {
         return this.context.isTerminated();
     }
 
-    public int execute() throws IntCodeComputerTerminatedException {
+    public long execute() throws IntCodeComputerTerminatedException {
         while (!context.isTerminated()) {
             OpCodeInstruction opCodeInstruction = OpCodeInstruction.ofCode(this.context.getMemory().next());
             IntcodeExpressionFactory factory = opCodeInstruction.getOpCode().getIntcodeExpressionFactory();

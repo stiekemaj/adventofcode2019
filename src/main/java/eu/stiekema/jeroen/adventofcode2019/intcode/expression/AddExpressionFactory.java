@@ -16,10 +16,11 @@ public class AddExpressionFactory implements IntcodeExpressionFactory {
     public Expression createExpression(OpCodeInstruction opCodeInstruction, Context context) {
         Expression argument1 = opCodeInstruction.getParameterExpression(0, context.getMemory().next());
         Expression argument2 = opCodeInstruction.getParameterExpression(1, context.getMemory().next());
+        Expression writePointer = opCodeInstruction.getWriteParameterExpression(2, context.getMemory().next());
 
         return Expression.write(
                 Expression.plus(argument1, argument2),
-                context.getMemory().next()
+                writePointer
         );
     }
 }

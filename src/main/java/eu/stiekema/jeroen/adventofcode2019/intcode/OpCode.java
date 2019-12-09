@@ -11,6 +11,7 @@ enum OpCode {
     JUMP_IF_FALSE("06", new JumpIfFalseExpressionFactory()),
     LESS_THAN("07", new LessThanExpressionFactory()),
     EQUALS("08", new EqualsExpressionFactory()),
+    ADJUST_RELATIVE_BASE("09", new AdjustRelativeBaseExpressionFactory()),
     TERMINATED("99", new TerminatedExpressionFactory());
 
     private String code;

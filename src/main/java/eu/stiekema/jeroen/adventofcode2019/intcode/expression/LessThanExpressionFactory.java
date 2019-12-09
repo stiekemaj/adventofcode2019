@@ -16,13 +16,13 @@ public class LessThanExpressionFactory implements IntcodeExpressionFactory {
     public Expression createExpression(OpCodeInstruction opCodeInstruction, Context context) {
         Expression firstParameterExpression = opCodeInstruction.getParameterExpression(0, context.getMemory().next());
         Expression secondParameterExpression = opCodeInstruction.getParameterExpression(1, context.getMemory().next());
-        Expression thirdParameterExpression = Expression.value(context.getMemory().next());
+        Expression writePointer = opCodeInstruction.getWriteParameterExpression(2, context.getMemory().next());
 
         return ctx -> {
             if (firstParameterExpression.interpret(ctx) < secondParameterExpression.interpret(ctx)) {
-                Expression.write(Expression.value(1), thirdParameterExpression.interpret(ctx)).interpret(ctx);
+                Expression.write(Expression.value(1), writePointer).interpret(ctx);
             } else {
-                Expression.write(Expression.value(0), thirdParameterExpression.interpret(ctx)).interpret(ctx);
+                Expression.write(Expression.value(0), writePointer).interpret(ctx);
             }
             return 0;
         };
