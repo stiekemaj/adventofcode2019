@@ -2,35 +2,72 @@ package eu.stiekema.jeroen.adventofcode2019.day10;
 
 import com.google.common.math.IntMath;
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
 public class Day10 {
     public static void main(String[] args) {
-        List<Coordinate> asteroids = getAsteroidCoordinates();
+        List<Coordinate> asteroids = getAsteroidCoordinates("day10.txt");
 
-
-        int coordinateWithMostVisibleAsteroids = 0;
+        Pair<Coordinate, List<Coordinate>> mostVisibleAsteroids = null;
 
         for (Coordinate asteroid : asteroids) {
-            int visibleAsteroids = 0;
             List<Coordinate> otherAsteroids = new ArrayList<>(asteroids);
             otherAsteroids.remove(asteroid);
 
-            for (Coordinate otherAsteroid : otherAsteroids) {
-                List<Coordinate> coordinatesInPath = getCoordinatesInPath(asteroid, otherAsteroid);
-                if (!hasAstroidOnAnyCoordinate(coordinatesInPath, asteroids)) {
-                    visibleAsteroids++;
-                }
-            }
-
-            if (coordinateWithMostVisibleAsteroids < visibleAsteroids) {
-                coordinateWithMostVisibleAsteroids = visibleAsteroids;
+            List<Coordinate> visibleAsteroids = findVisibleCoordinates(asteroid, otherAsteroids);
+            if (mostVisibleAsteroids == null || visibleAsteroids.size() > mostVisibleAsteroids.getValue().size()) {
+                mostVisibleAsteroids = new ImmutablePair<>(asteroid, visibleAsteroids);
             }
         }
 
-        System.out.println("Answer 1: " + coordinateWithMostVisibleAsteroids);
+        System.out.println("Answer 1: " + mostVisibleAsteroids.getValue().size());
 
+        Coordinate vaporizedAsteroidNr200 = vaporizeAndReturnVaporizedAsteroid(asteroids, mostVisibleAsteroids, 200);
+        System.out.println("Answer 2: " + (vaporizedAsteroidNr200.x * 100 + vaporizedAsteroidNr200.y));
+
+    }
+
+    private static Coordinate vaporizeAndReturnVaporizedAsteroid(List<Coordinate> asteroids, Pair<Coordinate, List<Coordinate>> mostVisibleAsteroids, int returnVaporizedNr) {
+        List<Coordinate> unvaporizedAsteroids = new ArrayList<>(asteroids);
+        Coordinate asteroidWithBaseStation = mostVisibleAsteroids.getKey();
+        List<Coordinate> visibleAsteroids = new ArrayList<>(mostVisibleAsteroids.getValue());
+
+        int vaporizedAsteroidCount = 0;
+
+        while (!unvaporizedAsteroids.isEmpty()) {
+            visibleAsteroids.sort((o1, o2) -> {
+                Double angle1 = asteroidWithBaseStation.getAngle(o1);
+                Double angle2 = asteroidWithBaseStation.getAngle(o2);
+                return angle1.compareTo(angle2);
+            });
+
+            for (Coordinate visibleAsteroid : visibleAsteroids) {
+                unvaporizedAsteroids.remove(visibleAsteroid);
+                vaporizedAsteroidCount++;
+
+                if (vaporizedAsteroidCount == returnVaporizedNr) {
+                    return visibleAsteroid;
+                }
+            }
+
+            visibleAsteroids = findVisibleCoordinates(asteroidWithBaseStation, unvaporizedAsteroids);
+        }
+
+        return null;
+    }
+
+    private static List<Coordinate> findVisibleCoordinates(Coordinate asteroid, List<Coordinate> otherAsteroids) {
+        List<Coordinate> visibleCoordinates = new ArrayList<>();
+        for (Coordinate otherAsteroid : otherAsteroids) {
+            List<Coordinate> coordinatesInPath = getCoordinatesInPath(asteroid, otherAsteroid);
+            if (!hasAstroidOnAnyCoordinate(coordinatesInPath, otherAsteroids)) {
+                visibleCoordinates.add(otherAsteroid);
+            }
+        }
+        return visibleCoordinates;
     }
 
     private static boolean hasAstroidOnAnyCoordinate(List<Coordinate> coordinates, List<Coordinate> asteroids) {
@@ -87,10 +124,10 @@ public class Day10 {
 
 
 
-    private static List<Coordinate> getAsteroidCoordinates() {
+    private static List<Coordinate> getAsteroidCoordinates(String file) {
         List<Coordinate> coordinates = new ArrayList<>();
 
-        List<String> lines = FileParseUtil.readLines(Day10.class.getClassLoader().getResourceAsStream("day10.txt"));
+        List<String> lines = FileParseUtil.readLines(Day10.class.getClassLoader().getResourceAsStream(file));
         for (int y = 0; y < lines.size(); y++) {
             String line = lines.get(y);
             char[] charArray = line.toCharArray();
@@ -111,6 +148,10 @@ public class Day10 {
         public Coordinate(int x, int y) {
             this.x = x;
             this.y = y;
+        }
+
+        double getAngle(Coordinate target) {
+            return -1 * Math.toDegrees(Math.atan2(target.x - x, target.y - y)) + 180;
         }
 
         @Override
