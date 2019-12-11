@@ -23,15 +23,13 @@ public class Day11 {
 
         System.out.println("Answer 2:");
         printPaintedPanels(computePaintedPanels(codes, new Coordinate(0, 0), WHITE, Direction.UP));
-
-
     }
 
     private static void printPaintedPanels(Map<Coordinate, Integer> paintedPanels) {
-        int minX = paintedPanels.keySet().stream().map(c -> c.x).min(Integer::compareTo).get();
-        int minY = paintedPanels.keySet().stream().map(c -> c.y).min(Integer::compareTo).get();
-        int maxX = paintedPanels.keySet().stream().map(c -> c.x).max(Integer::compareTo).get();
-        int maxY = paintedPanels.keySet().stream().map(c -> c.y).max(Integer::compareTo).get();
+        int minX = paintedPanels.keySet().stream().map(c -> c.x).min(Integer::compareTo).orElse(0);
+        int minY = paintedPanels.keySet().stream().map(c -> c.y).min(Integer::compareTo).orElse(0);
+        int maxX = paintedPanels.keySet().stream().map(c -> c.x).max(Integer::compareTo).orElse(0);
+        int maxY = paintedPanels.keySet().stream().map(c -> c.y).max(Integer::compareTo).orElse(0);
 
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
@@ -52,8 +50,7 @@ public class Day11 {
                 int color = (int) intcodeComputer.execute();
                 paintedPanels.put(currentPanel, color);
 
-                long directionIndication = intcodeComputer.execute();
-                robotDirection = getNewDirection(robotDirection, directionIndication);
+                robotDirection = getNewDirection(robotDirection, intcodeComputer.execute());
                 currentPanel = currentPanel.goToDirection(robotDirection);
                 currentPanelColor = paintedPanels.getOrDefault(currentPanel, BLACK);
             }
