@@ -1,6 +1,7 @@
 package eu.stiekema.jeroen.adventofcode2019.day10;
 
 import com.google.common.math.IntMath;
+import eu.stiekema.jeroen.adventofcode2019.common.Coordinate;
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -141,36 +142,4 @@ public class Day10 {
         return coordinates;
     }
 
-    static class Coordinate {
-        final int x;
-        final int y;
-
-        public Coordinate(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        double getAngle(Coordinate target) {
-            return -1 * Math.toDegrees(Math.atan2(target.x - x, target.y - y)) + 180;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Coordinate that = (Coordinate) o;
-            return x == that.x &&
-                    y == that.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
-        }
-
-        @Override
-        public String toString() {
-            return "(" + x + "," + y + ")";
-        }
-    }
 }
