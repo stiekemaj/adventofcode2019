@@ -17,7 +17,7 @@ public class Day10 {
             List<Coordinate> otherAsteroids = new ArrayList<>(asteroids);
             otherAsteroids.remove(asteroid);
 
-            List<Coordinate> visibleAsteroids = findVisibleCoordinates(asteroid, otherAsteroids);
+            List<Coordinate> visibleAsteroids = findVisibleAsteroids(asteroid, otherAsteroids);
             if (mostVisibleAsteroids == null || visibleAsteroids.size() > mostVisibleAsteroids.getValue().size()) {
                 mostVisibleAsteroids = new ImmutablePair<>(asteroid, visibleAsteroids);
             }
@@ -25,8 +25,8 @@ public class Day10 {
 
         System.out.println("Answer 1: " + mostVisibleAsteroids.getValue().size());
 
-        Coordinate vaporizedAsteroidNr200 = vaporizeAndReturnVaporizedAsteroid(asteroids, mostVisibleAsteroids, 200);
-        System.out.println("Answer 2: " + (vaporizedAsteroidNr200.x * 100 + vaporizedAsteroidNr200.y));
+        Coordinate vaporizedAsteroid = vaporizeAndReturnVaporizedAsteroid(asteroids, mostVisibleAsteroids, 200);
+        System.out.println("Answer 2: " + (vaporizedAsteroid.x * 100 + vaporizedAsteroid.y));
 
     }
 
@@ -53,21 +53,21 @@ public class Day10 {
                 }
             }
 
-            visibleAsteroids = findVisibleCoordinates(asteroidWithBaseStation, unvaporizedAsteroids);
+            visibleAsteroids = findVisibleAsteroids(asteroidWithBaseStation, unvaporizedAsteroids);
         }
 
         return null;
     }
 
-    private static List<Coordinate> findVisibleCoordinates(Coordinate asteroid, List<Coordinate> otherAsteroids) {
-        List<Coordinate> visibleCoordinates = new ArrayList<>();
+    private static List<Coordinate> findVisibleAsteroids(Coordinate asteroid, List<Coordinate> otherAsteroids) {
+        List<Coordinate> visibleAsteroids = new ArrayList<>();
         for (Coordinate otherAsteroid : otherAsteroids) {
             List<Coordinate> coordinatesInPath = getCoordinatesInPath(asteroid, otherAsteroid);
             if (!hasAstroidOnAnyCoordinate(coordinatesInPath, otherAsteroids)) {
-                visibleCoordinates.add(otherAsteroid);
+                visibleAsteroids.add(otherAsteroid);
             }
         }
-        return visibleCoordinates;
+        return visibleAsteroids;
     }
 
     private static boolean hasAstroidOnAnyCoordinate(List<Coordinate> coordinates, List<Coordinate> asteroids) {
