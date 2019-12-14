@@ -41,6 +41,10 @@ public class Context {
         return input.remove();
     }
 
+    public void clearInput() {
+        this.input.clear();
+    }
+
     public long getOutput() {
         return output;
     }

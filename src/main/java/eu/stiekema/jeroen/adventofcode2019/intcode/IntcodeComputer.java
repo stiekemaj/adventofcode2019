@@ -21,6 +21,14 @@ public class IntcodeComputer {
         this.context.addInput(input);
     }
 
+    public void clearInput() {
+        this.context.clearInput();
+    }
+
+    public void setAddressValue(long address, long value) {
+        context.getMemory().write(address, value);
+    }
+
     /**
      * Execute code until output and terminate opcode has been processed subsequently. The output will be returned.
      * If an output opcode will be followed by any opcode other than terminate, a DiagnosticFailureException will
@@ -61,5 +69,4 @@ public class IntcodeComputer {
         }
         throw new IntCodeComputerTerminatedException();
     }
-
 }
