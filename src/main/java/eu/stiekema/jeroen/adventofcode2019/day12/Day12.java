@@ -2,11 +2,15 @@ package eu.stiekema.jeroen.adventofcode2019.day12;
 
 import eu.stiekema.jeroen.adventofcode2019.common.Coordinate3d;
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
+import eu.stiekema.jeroen.adventofcode2019.common.MathUtil;
 import org.apache.commons.lang3.mutable.MutableInt;
 
+import java.math.BigInteger;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PropertyResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -24,21 +28,45 @@ public class Day12 {
         System.out.println("Answer 1: " + calculateTotalEnergy(moons));
 
         // reset moons for part wo
-        List<Moon> initialMoonState = parseMoons("day12.txt");
         moons = parseMoons("day12.txt");
 
-        long nrOfSteps = 0;
-
-        while (!initialMoonState.equals(moons)) {
+        long step = 0L;
+        BigInteger xRepeatCount = BigInteger.valueOf(-1L);
+        BigInteger yRepeatCount = BigInteger.valueOf(-1L);
+        BigInteger zRepeatCount = BigInteger.valueOf(-1L);
+        while (xRepeatCount.doubleValue() == -1 || yRepeatCount.doubleValue() == -1 || zRepeatCount.doubleValue() == -1) {
             executeTimeStep(moons);
-            nrOfSteps++;
-            if (nrOfSteps % 1_000_000_000L == 0) {
-                System.out.println("step " + nrOfSteps);
-            }
+            step++;
+            xRepeatCount = xRepeatCount.doubleValue() == -1 ? calculateXRepeatCount(step, moons) : xRepeatCount;
+            yRepeatCount = yRepeatCount.doubleValue() == -1 ? calculateYRepeatCount(step, moons) : yRepeatCount;
+            zRepeatCount = zRepeatCount.doubleValue() == -1 ? calculateZRepeatCount(step, moons) : zRepeatCount;
         }
 
-        System.out.println("Answer 2: " + nrOfSteps);
+        System.out.println("Answer 2: " + MathUtil.lcm(xRepeatCount, yRepeatCount, zRepeatCount));
+    }
 
+    private static BigInteger calculateZRepeatCount(long step, List<Moon> moons) {
+        if (moons.stream().allMatch(m -> m.initialCoordinate.z == m.coordinate.z && m.velocity.z == 0)) {
+            return BigInteger.valueOf(step);
+        } else {
+            return BigInteger.valueOf(-1L);
+        }
+    }
+
+    private static BigInteger calculateYRepeatCount(long step, List<Moon> moons) {
+        if (moons.stream().allMatch(m -> m.initialCoordinate.y == m.coordinate.y && m.velocity.y == 0)) {
+            return BigInteger.valueOf(step);
+        } else {
+            return BigInteger.valueOf(-1L);
+        }
+    }
+
+    private static BigInteger calculateXRepeatCount(long step, List<Moon> moons) {
+        if (moons.stream().allMatch(m -> m.initialCoordinate.x == m.coordinate.x && m.velocity.x == 0)) {
+            return BigInteger.valueOf(step);
+        } else {
+            return BigInteger.valueOf(-1L);
+        }
     }
 
     private static void executeTimeStep(List<Moon> moons) {
@@ -98,17 +126,22 @@ public class Day12 {
     }
 
     private static class Moon {
-
+        private final Coordinate3d initialCoordinate;
         private Coordinate3d coordinate;
         private Coordinate3d velocity;
 
-        public Moon(Coordinate3d coordinate) {
-            this.coordinate = coordinate;
+        public Moon(Coordinate3d initialCoordinate) {
+            this.initialCoordinate = initialCoordinate;
+            this.coordinate = new Coordinate3d(initialCoordinate);
             this.velocity = new Coordinate3d(0, 0, 0);
         }
 
         public Coordinate3d getCoordinate() {
             return coordinate;
+        }
+
+        public Coordinate3d getInitialCoordinate() {
+            return initialCoordinate;
         }
 
         public Coordinate3d getVelocity() {

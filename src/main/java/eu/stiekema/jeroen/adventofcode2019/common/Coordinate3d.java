@@ -9,6 +9,12 @@ public class Coordinate3d {
         this.z = z;
     }
 
+    public Coordinate3d(Coordinate3d coordinate3d) {
+        this.x = coordinate3d.x;
+        this.y = coordinate3d.y;
+        this.z = coordinate3d.z;
+    }
+
     public Coordinate3d add(Coordinate3d addedCoordinate) {
         return new Coordinate3d(this.x + addedCoordinate.x, this.y + addedCoordinate.y, this.z + addedCoordinate.z);
     }
