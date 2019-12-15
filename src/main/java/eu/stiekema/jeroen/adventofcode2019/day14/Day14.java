@@ -39,6 +39,8 @@ public class Day14 {
             context = new Context(outputReactionMap);
         }
 
+        // TODO: shitty solution, try implement it with a binary search
+
         while (true) {
             usedOre += findNrOfOre(new ChemicalQuantity(1L, "FUEL"), context);
 

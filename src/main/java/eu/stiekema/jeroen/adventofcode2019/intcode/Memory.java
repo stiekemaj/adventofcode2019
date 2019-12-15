@@ -5,12 +5,17 @@ import java.util.List;
 
 public class Memory {
 
-    private final List<Long> addresses = new ArrayList<>();
+    private final List<Long> addresses;
 
     private int pointer = 0;
 
+    private Memory(Memory memory) {
+        this.addresses = new ArrayList<>(memory.addresses);
+        this.pointer = memory.pointer;
+    }
+
     Memory(List<Long> addresses) {
-        this.addresses.addAll(addresses);
+        this.addresses = new ArrayList<>(addresses);
     }
 
     public long next() {
@@ -62,5 +67,9 @@ public class Memory {
             throw new RuntimeException("does not support arrays bigger than " + pointer);
         }
         this.pointer = (int) pointer;
+    }
+
+    public Memory copy() {
+        return new Memory(this);
     }
 }

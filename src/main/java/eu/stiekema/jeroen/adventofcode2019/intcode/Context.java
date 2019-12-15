@@ -1,5 +1,7 @@
 package eu.stiekema.jeroen.adventofcode2019.intcode;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Queue;
 
 public class Context {
@@ -8,6 +10,14 @@ public class Context {
     private final Queue<Long> input;
     private long output = 0L;
     private long relativeBase = 0;
+
+    private Context(Context context) {
+        this.memory = context.memory.copy();
+        this.terminate = context.terminate;
+        this.input = new LinkedList<>(context.input);
+        this.output = context.output;
+        this.relativeBase = context.relativeBase;
+    }
 
     public Context(Memory memory, Queue<Long> input) {
         this.memory = memory;
@@ -55,5 +65,9 @@ public class Context {
 
     public void setTerminate(boolean terminate) {
         this.terminate = terminate;
+    }
+
+    public Context copy() {
+        return new Context(this);
     }
 }

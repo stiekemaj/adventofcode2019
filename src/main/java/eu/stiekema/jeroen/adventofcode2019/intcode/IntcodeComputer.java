@@ -13,6 +13,14 @@ public class IntcodeComputer {
         this.context = new Context(new Memory(codes), input);
     }
 
+    private IntcodeComputer(IntcodeComputer intcodeComputer) {
+        this.context = intcodeComputer.context.copy();
+    }
+
+    public IntcodeComputer copy() {
+        return new IntcodeComputer(this);
+    }
+
     public static IntcodeComputer newInstance(List<Long> codes) {
         return new IntcodeComputer(codes, new LinkedList<>());
     }
