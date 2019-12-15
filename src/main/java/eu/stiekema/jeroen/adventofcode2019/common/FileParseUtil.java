@@ -15,6 +15,10 @@ public class FileParseUtil {
         return writer.toString();
     }
 
+    public static List<String> readLines(String file) {
+        return readLines(FileParseUtil.class.getClassLoader().getResourceAsStream(file));
+    }
+
     public static List<String> readLines(InputStream input) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         List<String> result = new ArrayList<>();

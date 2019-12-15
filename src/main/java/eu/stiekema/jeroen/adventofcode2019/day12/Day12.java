@@ -6,11 +6,9 @@ import eu.stiekema.jeroen.adventofcode2019.common.MathUtil;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.math.BigInteger;
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.PropertyResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
