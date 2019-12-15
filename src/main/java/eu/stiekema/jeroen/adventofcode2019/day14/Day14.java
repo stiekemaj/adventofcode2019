@@ -19,20 +19,31 @@ public class Day14 {
         long nrOfOre = findNrOfOre(targetChemicalQuantity, new Context(outputReactionMap));
         System.out.println("Answer part 1: " + nrOfOre);
 
-        Context context = new Context(outputReactionMap);
-        long nrOfProducedFuel = 0;
-        long nrOfUsedOre = 0;
 
+        // part 2
+
+        long fuelIncrementor = 500_000L;
+        long nrOfProducedFuel = 0L;
+        long usedOre = 0L;
+        long maxOreToUse = 1_000_000_000_000L;
+        Context context = new Context(outputReactionMap);
 
         while (true) {
-            nrOfUsedOre += findNrOfOre(new ChemicalQuantity(1, "FUEL"), context);
-
-            if (nrOfUsedOre > 1_000_000_000_000L) {
+            long totalNrOfOre = findNrOfOre(new ChemicalQuantity(nrOfProducedFuel + fuelIncrementor, "FUEL"), context);
+            if (totalNrOfOre > maxOreToUse) {
                 break;
             }
 
-            if (nrOfOre % 100_000_000 == 0) {
-                System.out.println("nrOfUsedOre: " + nrOfOre);
+            usedOre = totalNrOfOre;
+            nrOfProducedFuel += fuelIncrementor;
+            context = new Context(outputReactionMap);
+        }
+
+        while (true) {
+            usedOre += findNrOfOre(new ChemicalQuantity(1L, "FUEL"), context);
+
+            if (usedOre > maxOreToUse) {
+                break;
             }
 
             nrOfProducedFuel++;
@@ -55,16 +66,18 @@ public class Day14 {
 
         long nrOfOre = 0;
 
-        int nrOfNeededReactions = (int) Math.ceil((double) targetChemicalQuantity.getQuantity() / (double) reaction.getOutputChemicalQuantity().getQuantity());
-        for (int i = 0; i < nrOfNeededReactions; i++) {
-            List<ChemicalQuantity> inputChemicalQuantities = reaction.getInputChemicalQuantities();
-            for (ChemicalQuantity inputChemicalQuantity : inputChemicalQuantities) {
-                ChemicalQuantity chemicalQuantityLeftover = context.removeAndGetChemicalQuantityLeftover(inputChemicalQuantity);
-                nrOfOre += findNrOfOre(inputChemicalQuantity.substract(chemicalQuantityLeftover), context);
-            }
+        long nrOfNeededReactions = (long) Math.ceil((double) targetChemicalQuantity.getQuantity() / (double) reaction.getOutputChemicalQuantity().getQuantity());
+
+        List<ChemicalQuantity> inputChemicalQuantities = reaction.getInputChemicalQuantities()
+                .stream()
+                .map(t -> new ChemicalQuantity(t.quantity * nrOfNeededReactions, t.name))
+                .collect(Collectors.toList());
+        for (ChemicalQuantity inputChemicalQuantity : inputChemicalQuantities) {
+            ChemicalQuantity chemicalQuantityLeftover = context.removeAndGetChemicalQuantityLeftover(inputChemicalQuantity);
+            nrOfOre += findNrOfOre(inputChemicalQuantity.substract(chemicalQuantityLeftover), context);
         }
 
-        int producedQuantity = nrOfNeededReactions * reaction.getOutputChemicalQuantity().getQuantity();
+        long producedQuantity = nrOfNeededReactions * reaction.getOutputChemicalQuantity().getQuantity();
         context.addLeftover(targetChemicalQuantity.getName(), producedQuantity - targetChemicalQuantity.getQuantity());
 
         return nrOfOre;
@@ -73,7 +86,7 @@ public class Day14 {
 
     static class Context {
         private final Map<String, Reaction> outputReactionMap;
-        private final Map<String, Integer> chemicalLeftovers = new HashMap<>();
+        private final Map<String, Long> chemicalLeftovers = new HashMap<>();
 
         public Context(Map<String, Reaction> outputReactionMap) {
             this.outputReactionMap = outputReactionMap;
@@ -85,18 +98,22 @@ public class Day14 {
 
         public ChemicalQuantity removeAndGetChemicalQuantityLeftover(ChemicalQuantity neededChemicalQuantity) {
             if (!chemicalLeftovers.containsKey(neededChemicalQuantity.getName())) {
-                return new ChemicalQuantity(0, neededChemicalQuantity.getName());
+                return new ChemicalQuantity(0L, neededChemicalQuantity.getName());
             }
 
-            int currentLeftoverQuantity = chemicalLeftovers.get(neededChemicalQuantity.getName());
-            int takenQuantity = Math.min(currentLeftoverQuantity, neededChemicalQuantity.getQuantity());
+            long currentLeftoverQuantity = chemicalLeftovers.get(neededChemicalQuantity.getName());
+            long takenQuantity = Math.min(currentLeftoverQuantity, neededChemicalQuantity.getQuantity());
             chemicalLeftovers.put(neededChemicalQuantity.getName(), currentLeftoverQuantity - takenQuantity);
             return new ChemicalQuantity(takenQuantity, neededChemicalQuantity.getName());
         }
 
-        public void addLeftover(String chemicalQuantityName, int quantity) {
-            int currentLeftover = chemicalLeftovers.getOrDefault(chemicalQuantityName, 0);
+        public void addLeftover(String chemicalQuantityName, long quantity) {
+            long currentLeftover = chemicalLeftovers.getOrDefault(chemicalQuantityName, 0L);
             chemicalLeftovers.put(chemicalQuantityName, currentLeftover + quantity);
+        }
+
+        public boolean hasNoLeftover() {
+            return chemicalLeftovers.values().stream().allMatch(t -> t == 0);
         }
     }
 
@@ -114,7 +131,7 @@ public class Day14 {
             List<ChemicalQuantity> inputChemicalQuantities = new ArrayList<>();
             String[] reactions = splitLeftAndRight[0].split(", ");
             for (String reaction : reactions) {
-                inputChemicalQuantities.add(new ChemicalQuantity(Integer.valueOf(reaction.split(" ")[0]), reaction.split(" ")[1]));
+                inputChemicalQuantities.add(new ChemicalQuantity(Long.valueOf(reaction.split(" ")[0]), reaction.split(" ")[1]));
             }
             return new Reaction(
                     inputChemicalQuantities,
@@ -139,15 +156,15 @@ public class Day14 {
     }
 
     static class ChemicalQuantity {
-        private final int quantity;
+        private final long quantity;
         private final String name;
 
-        public ChemicalQuantity(int quantity, String name) {
+        public ChemicalQuantity(long quantity, String name) {
             this.quantity = quantity;
             this.name = name;
         }
 
-        public int getQuantity() {
+        public long getQuantity() {
             return quantity;
         }
 
