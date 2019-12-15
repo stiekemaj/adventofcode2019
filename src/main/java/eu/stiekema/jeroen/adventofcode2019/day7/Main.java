@@ -3,7 +3,7 @@ package eu.stiekema.jeroen.adventofcode2019.day7;
 import com.google.common.collect.Collections2;
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
 import eu.stiekema.jeroen.adventofcode2019.intcode.IntCodeComputerTerminatedException;
-import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputer;
+import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputerImpl;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -25,9 +25,9 @@ public class Main {
     private static long getHighestOutput(List<Long> codes, Collection<List<Integer>> phaseSettingsCombinations, boolean feedbackMode) {
         long highestOutput = 0;
         for (List<Integer> phaseSettingCombination : phaseSettingsCombinations) {
-            List<IntcodeComputer> intcodeComputers = phaseSettingCombination.stream()
+            List<IntcodeComputerImpl> intcodeComputers = phaseSettingCombination.stream()
                     .map(phase -> {
-                        IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+                        IntcodeComputerImpl intcodeComputer = IntcodeComputerImpl.newInstance(codes);
                         intcodeComputer.addInput(phase);
                         return intcodeComputer;
                     })
@@ -36,7 +36,7 @@ public class Main {
             try {
                 long previousOutput = 0;
                 do {
-                    for (IntcodeComputer intcodeComputer : intcodeComputers) {
+                    for (IntcodeComputerImpl intcodeComputer : intcodeComputers) {
                         intcodeComputer.addInput(previousOutput);
                         previousOutput = intcodeComputer.execute();
                     }
@@ -50,7 +50,7 @@ public class Main {
         return highestOutput;
     }
 
-    private static boolean hasTerminatedComputer(List<IntcodeComputer> intcodeComputers) {
-        return intcodeComputers.stream().map(IntcodeComputer::isTerminated).reduce(false, (a, b) -> a || b);
+    private static boolean hasTerminatedComputer(List<IntcodeComputerImpl> intcodeComputers) {
+        return intcodeComputers.stream().map(IntcodeComputerImpl::isTerminated).reduce(false, (a, b) -> a || b);
     }
 }

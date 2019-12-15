@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-public class IntcodeComputerTest {
+public class IntcodeComputerImplTest {
 
     @Test
     public void interpretAndReturnDiagnosticCode() {
@@ -23,7 +23,7 @@ public class IntcodeComputerTest {
     }
 
     private long executeWithInput(String program, int input) {
-        IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(StringParseUtil.getCodes(program, ","));
+        IntcodeComputerImpl intcodeComputer = IntcodeComputerImpl.newInstance(StringParseUtil.getCodes(program, ","));
         intcodeComputer.addInput(input);
         return intcodeComputer.executeDiagnostic();
     }

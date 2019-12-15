@@ -1,7 +1,7 @@
 package eu.stiekema.jeroen.adventofcode2019.day5;
 
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
-import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputer;
+import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputerImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,12 +14,12 @@ public class Main {
     public static void main(String[] args) throws IOException {
         List<Long> codes = FileParseUtil.getCodes("day5.txt", ",");
 
-        IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+        IntcodeComputerImpl intcodeComputer = IntcodeComputerImpl.newInstance(codes);
         intcodeComputer.addInput(AIRCONDITIONER_UNIT_ID);
         System.out.println("Solution day 5 part 1: " + intcodeComputer.executeDiagnostic());
 
 
-        intcodeComputer = IntcodeComputer.newInstance(codes);
+        intcodeComputer = IntcodeComputerImpl.newInstance(codes);
         intcodeComputer.addInput(THERMAL_RADIATOR_ID);
         System.out.println("Solution day 5 part 2: " + intcodeComputer.executeDiagnostic());
     }

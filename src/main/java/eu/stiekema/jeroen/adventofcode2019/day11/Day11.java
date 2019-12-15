@@ -4,7 +4,7 @@ import eu.stiekema.jeroen.adventofcode2019.common.Coordinate;
 import eu.stiekema.jeroen.adventofcode2019.common.Direction;
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
 import eu.stiekema.jeroen.adventofcode2019.intcode.IntCodeComputerTerminatedException;
-import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputer;
+import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputerImpl;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -43,7 +43,7 @@ public class Day11 {
     private static Map<Coordinate, Integer> computePaintedPanels(List<Long> codes, Coordinate currentPanel, int currentPanelColor, Direction robotDirection) {
         Map<Coordinate, Integer> paintedPanels = new HashMap<>();
         try {
-            IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+            IntcodeComputerImpl intcodeComputer = IntcodeComputerImpl.newInstance(codes);
             while (!intcodeComputer.isTerminated()) {
                 intcodeComputer.addInput(currentPanelColor);
 

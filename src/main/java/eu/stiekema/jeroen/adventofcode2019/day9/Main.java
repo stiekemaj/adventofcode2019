@@ -2,7 +2,7 @@ package eu.stiekema.jeroen.adventofcode2019.day9;
 
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
 import eu.stiekema.jeroen.adventofcode2019.intcode.IntCodeComputerTerminatedException;
-import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputer;
+import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputerImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class Main {
     }
 
     private static List<Long> process(List<Long> codes, long input) throws IntCodeComputerTerminatedException {
-        IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+        IntcodeComputerImpl intcodeComputer = IntcodeComputerImpl.newInstance(codes);
         intcodeComputer.addInput(input);
         List<Long> output = new ArrayList<>();
         while (!intcodeComputer.isTerminated()) {

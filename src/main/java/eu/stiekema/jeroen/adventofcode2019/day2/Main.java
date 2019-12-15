@@ -1,7 +1,7 @@
 package eu.stiekema.jeroen.adventofcode2019.day2;
 
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
-import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputer;
+import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputerImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,7 +12,7 @@ public class Main {
 
         writeNoun(codes, 12);
         writeVerb(codes, 2);
-        IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+        IntcodeComputerImpl intcodeComputer = IntcodeComputerImpl.newInstance(codes);
         intcodeComputer.addInput(0);
         intcodeComputer.executeDiagnostic();
         System.out.println("Result of first question: " + intcodeComputer.getIndex0Value());
@@ -24,7 +24,7 @@ public class Main {
             for (int verb = 0; verb < 100; verb++) {
                 writeNoun(codes, noun);
                 writeVerb(codes, verb);
-                IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+                IntcodeComputerImpl intcodeComputer = IntcodeComputerImpl.newInstance(codes);
                 intcodeComputer.addInput(0);
                 intcodeComputer.executeDiagnostic();
                 if (intcodeComputer.getIndex0Value() == result) {

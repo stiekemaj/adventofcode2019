@@ -1,18 +1,21 @@
 package eu.stiekema.jeroen.adventofcode2019.day15;
 
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+import com.googlecode.lanterna.terminal.TerminalFactory;
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
 import eu.stiekema.jeroen.adventofcode2019.intcode.IntCodeComputerTerminatedException;
 import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputer;
+import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputerImpl;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Day15 {
     public static void main(String[] args) throws IOException, IntCodeComputerTerminatedException, RepairDroidHitWallException {
         List<Long> codes = FileParseUtil.getCodes("day15.txt", ",");
-        IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+        TerminalFactory terminalFactory = new DefaultTerminalFactory();
+        IntcodeComputer intcodeComputer = new RepairDroidTerminalComputer(IntcodeComputerImpl.newInstance(codes), terminalFactory.createTerminal());
+
         long fewestNumberOfMovement = findOxygenSystemAndReturnNrOfSteps(intcodeComputer, null);
         System.out.println("Answer part 1: " + fewestNumberOfMovement);
     }
@@ -44,34 +47,5 @@ public class Day15 {
         return fewestCommands;
     }
 
-    //north (1), south (2), west (3), and east (4).
-    enum MovementCommand {
-        NORTH(1L), SOUTH(2L), WEST(3L), EAST(4L);
-
-        private long code;
-        
-        MovementCommand(long code) {
-            this.code = code;
-        }
-        
-        MovementCommand opposite() {
-            switch (this) {
-                case NORTH: return SOUTH;
-                case SOUTH: return NORTH;
-                case WEST: return EAST;
-                case EAST: return WEST;
-                default: throw new IllegalArgumentException("unknown moment command: " + this);
-            }
-        }
-
-        public long getCode() {
-            return code;
-        }
-        
-        static List<MovementCommand> getCommands(MovementCommand previousCommand) {
-            MovementCommand oppositeMovementCommand = previousCommand == null ? null : previousCommand.opposite();
-            return Arrays.stream(values()).filter(t -> t != oppositeMovementCommand).collect(Collectors.toList());
-        }
-    }
 }
 

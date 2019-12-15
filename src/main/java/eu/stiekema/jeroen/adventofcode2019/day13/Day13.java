@@ -6,7 +6,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
 import eu.stiekema.jeroen.adventofcode2019.intcode.IntCodeComputerTerminatedException;
-import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputer;
+import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputerImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 public class Day13 {
     public static void main(String[] args) throws IOException {
         List<Long> codes = FileParseUtil.getCodes("day13.txt", ",");
-        IntcodeComputer intcodeComputer = IntcodeComputer.newInstance(codes);
+        IntcodeComputerImpl intcodeComputer = IntcodeComputerImpl.newInstance(codes);
         int blockCount = 0;
         try {
             while (!intcodeComputer.isTerminated()) {
@@ -29,7 +29,7 @@ public class Day13 {
 
         System.out.println("Answer 1: " + blockCount);
 
-        intcodeComputer = IntcodeComputer.newInstance(codes);
+        intcodeComputer = IntcodeComputerImpl.newInstance(codes);
         intcodeComputer.setAddressValue(0L, 2L);
         TerminalFactory terminalFactory = new DefaultTerminalFactory();
         Terminal terminal = terminalFactory.createTerminal();
@@ -71,7 +71,7 @@ public class Day13 {
 
     }
 
-    private static void doJoystickInput(IntcodeComputer computer, long paddleX, long ballX) {
+    private static void doJoystickInput(IntcodeComputerImpl computer, long paddleX, long ballX) {
         computer.clearInput();
         computer.addInput(paddleX == ballX ? 0L : paddleX < ballX ? 1L : -1L);
     }
