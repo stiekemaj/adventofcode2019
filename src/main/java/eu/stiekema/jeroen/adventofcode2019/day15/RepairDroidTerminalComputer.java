@@ -13,23 +13,26 @@ public class RepairDroidTerminalComputer implements IntcodeComputer {
     private final Terminal terminal;
 
     private TerminalPosition terminalPosition;
+    private TerminalPosition droidPosition;
     private MovementCommand lastMovementCommand;
 
     public RepairDroidTerminalComputer(IntcodeComputer intcodeComputer, Terminal terminal) {
         this.intcodeComputer = intcodeComputer;
         this.terminal = terminal;
-        this.terminalPosition = new TerminalPosition(40, 13);
+        this.terminalPosition = new TerminalPosition(40, 21);
+        this.droidPosition = this.terminalPosition;
     }
 
-    private RepairDroidTerminalComputer(IntcodeComputer intcodeComputer, Terminal terminal, TerminalPosition terminalPosition) {
+    private RepairDroidTerminalComputer(IntcodeComputer intcodeComputer, Terminal terminal, TerminalPosition terminalPosition, TerminalPosition droidPosition) {
         this.intcodeComputer = intcodeComputer;
         this.terminal = terminal;
         this.terminalPosition = terminalPosition;
+        this.droidPosition = droidPosition;
     }
 
     @Override
     public IntcodeComputer copy() {
-        return new RepairDroidTerminalComputer(this.intcodeComputer.copy(), this.terminal, this.terminalPosition);
+        return new RepairDroidTerminalComputer(this.intcodeComputer.copy(), this.terminal, this.terminalPosition, this.droidPosition);
     }
 
     @Override
@@ -44,15 +47,19 @@ public class RepairDroidTerminalComputer implements IntcodeComputer {
             long result = this.intcodeComputer.execute();
             terminal.setCursorPosition(this.terminalPosition);
             if (result == 0L) {
+                updateTerminalPosition();
+                terminal.setCursorPosition(this.terminalPosition);
                 terminal.putCharacter('#');
             } else if (result == 1L) {
+                terminal.setCursorPosition(this.terminalPosition);
                 terminal.putCharacter('.');
-                updateTerminalPosition();
-
+                updateDroidPosition();
             } else if (result == 2L) {
+                terminal.setCursorPosition(this.terminalPosition);
                 terminal.putCharacter('O');
-                updateTerminalPosition();
+                updateDroidPosition();
             }
+            this.terminalPosition = this.droidPosition;
             terminal.setCursorPosition(new TerminalPosition(0, 0));
             terminal.flush();
 
@@ -63,19 +70,25 @@ public class RepairDroidTerminalComputer implements IntcodeComputer {
     }
 
     private void updateTerminalPosition() {
+        this.terminalPosition = getNextPosition(this.terminalPosition);
+    }
+
+    private void updateDroidPosition() {
+        this.droidPosition = getNextPosition(this.droidPosition);
+    }
+
+    private TerminalPosition getNextPosition(TerminalPosition position) {
         switch (this.lastMovementCommand) {
             case NORTH:
-                this.terminalPosition = new TerminalPosition(this.terminalPosition.getColumn(), this.terminalPosition.getRow() - 1);
-                break;
+                return new TerminalPosition(position.getColumn(), position.getRow() - 1);
             case WEST:
-                this.terminalPosition = new TerminalPosition(this.terminalPosition.getColumn() - 1, this.terminalPosition.getRow());
-                break;
+                return new TerminalPosition(position.getColumn() - 1, position.getRow());
             case SOUTH:
-                this.terminalPosition = new TerminalPosition(this.terminalPosition.getColumn(), this.terminalPosition.getRow() + 1);
-                break;
+                return new TerminalPosition(position.getColumn(), position.getRow() + 1);
             case EAST:
-                this.terminalPosition = new TerminalPosition(this.terminalPosition.getColumn() + 1, this.terminalPosition.getRow());
-                break;
+                return new TerminalPosition(position.getColumn() + 1, position.getRow());
+            default:
+                throw new IllegalArgumentException();
         }
     }
 }
