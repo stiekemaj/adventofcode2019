@@ -19,6 +19,27 @@ public class Day14 {
         long nrOfOre = findNrOfOre(targetChemicalQuantity, new Context(outputReactionMap));
         System.out.println("Answer part 1: " + nrOfOre);
 
+        Context context = new Context(outputReactionMap);
+        long nrOfProducedFuel = 0;
+        long nrOfUsedOre = 0;
+
+
+        while (true) {
+            nrOfUsedOre += findNrOfOre(new ChemicalQuantity(1, "FUEL"), context);
+
+            if (nrOfUsedOre > 1_000_000_000_000L) {
+                break;
+            }
+
+            if (nrOfOre % 100_000_000 == 0) {
+                System.out.println("nrOfUsedOre: " + nrOfOre);
+            }
+
+            nrOfProducedFuel++;
+        }
+
+        System.out.println("Answer part 2: " + nrOfProducedFuel);
+
     }
 
     private static long findNrOfOre(ChemicalQuantity targetChemicalQuantity, Context context) {
@@ -43,7 +64,8 @@ public class Day14 {
             }
         }
 
-        context.addLeftover(targetChemicalQuantity.getName(), nrOfNeededReactions * reaction.getOutputChemicalQuantity().getQuantity() - targetChemicalQuantity.getQuantity());
+        int producedQuantity = nrOfNeededReactions * reaction.getOutputChemicalQuantity().getQuantity();
+        context.addLeftover(targetChemicalQuantity.getName(), producedQuantity - targetChemicalQuantity.getQuantity());
 
         return nrOfOre;
     }
