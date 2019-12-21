@@ -1,5 +1,6 @@
 package eu.stiekema.jeroen.adventofcode2019.day15;
 
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.TerminalFactory;
 import eu.stiekema.jeroen.adventofcode2019.common.FileParseUtil;
@@ -14,6 +15,7 @@ public class Day15 {
     public static void main(String[] args) throws IOException, IntCodeComputerTerminatedException, RepairDroidHitWallException {
         List<Long> codes = FileParseUtil.getCodes("day15.txt", ",");
         TerminalFactory terminalFactory = new DefaultTerminalFactory();
+        ((DefaultTerminalFactory) terminalFactory).setInitialTerminalSize(new TerminalSize(100, 100));
         IntcodeComputer intcodeComputer = new RepairDroidTerminalComputer(IntcodeComputerImpl.newInstance(codes), terminalFactory.createTerminal());
 
         long fewestNumberOfMovement = findOxygenSystemAndReturnNrOfSteps(intcodeComputer, null);
@@ -31,14 +33,14 @@ public class Day15 {
         }
 
         List<MovementCommand> nextPossibleCommands = MovementCommand.getCommands(previousCommand);
-        long fewestCommands = Long.MAX_VALUE;
+        long fewestCommands = 1000000;
         for (MovementCommand command : nextPossibleCommands) {
             IntcodeComputer clonedComputer = computer.copy();
             clonedComputer.addInput(command.getCode());
             try {
-                long nrOfSteps = findOxygenSystemAndReturnNrOfSteps(clonedComputer, command);
-                if (nrOfSteps < fewestCommands - 1) {
-                    fewestCommands = nrOfSteps + 1;
+                long nrOfSteps = findOxygenSystemAndReturnNrOfSteps(clonedComputer, command) + 1;
+                if (nrOfSteps < fewestCommands) {
+                    fewestCommands = nrOfSteps;
                 }
             } catch (RepairDroidHitWallException ignored) {
             }

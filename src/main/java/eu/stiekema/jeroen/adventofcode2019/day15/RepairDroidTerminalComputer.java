@@ -1,6 +1,7 @@
 package eu.stiekema.jeroen.adventofcode2019.day15;
 
 import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.terminal.Terminal;
 import eu.stiekema.jeroen.adventofcode2019.intcode.IntCodeComputerTerminatedException;
 import eu.stiekema.jeroen.adventofcode2019.intcode.IntcodeComputer;
@@ -15,6 +16,7 @@ public class RepairDroidTerminalComputer implements IntcodeComputer {
     private TerminalPosition terminalPosition;
     private TerminalPosition droidPosition;
     private MovementCommand lastMovementCommand;
+    private boolean firstStep = true;
 
     public RepairDroidTerminalComputer(IntcodeComputer intcodeComputer, Terminal terminal) {
         this.intcodeComputer = intcodeComputer;
@@ -23,16 +25,17 @@ public class RepairDroidTerminalComputer implements IntcodeComputer {
         this.droidPosition = this.terminalPosition;
     }
 
-    private RepairDroidTerminalComputer(IntcodeComputer intcodeComputer, Terminal terminal, TerminalPosition terminalPosition, TerminalPosition droidPosition) {
+    private RepairDroidTerminalComputer(IntcodeComputer intcodeComputer, Terminal terminal, TerminalPosition terminalPosition, TerminalPosition droidPosition, boolean firstStep) {
         this.intcodeComputer = intcodeComputer;
         this.terminal = terminal;
         this.terminalPosition = terminalPosition;
         this.droidPosition = droidPosition;
+        this.firstStep = firstStep;
     }
 
     @Override
     public IntcodeComputer copy() {
-        return new RepairDroidTerminalComputer(this.intcodeComputer.copy(), this.terminal, this.terminalPosition, this.droidPosition);
+        return new RepairDroidTerminalComputer(this.intcodeComputer.copy(), this.terminal, this.terminalPosition, this.droidPosition, this.firstStep);
     }
 
     @Override
@@ -44,6 +47,12 @@ public class RepairDroidTerminalComputer implements IntcodeComputer {
     @Override
     public long execute() throws IntCodeComputerTerminatedException {
         try {
+            if (firstStep) {
+                terminal.setBackgroundColor(new TextColor.RGB(255, 0, 0));
+            } else {
+                terminal.setBackgroundColor(new TextColor.RGB(0, 255, 0));
+            }
+
             long result = this.intcodeComputer.execute();
             terminal.setCursorPosition(this.terminalPosition);
             if (result == 0L) {
@@ -62,7 +71,7 @@ public class RepairDroidTerminalComputer implements IntcodeComputer {
             this.terminalPosition = this.droidPosition;
             terminal.setCursorPosition(new TerminalPosition(0, 0));
             terminal.flush();
-
+            firstStep = false;
             return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
